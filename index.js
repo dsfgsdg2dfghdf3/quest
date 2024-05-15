@@ -1,14 +1,22 @@
-function maxEnvelopes(envelopes) {
-  envelopes.sort((a, b) => a[0] - b[0] || b[1] - a[1]);
-  const dp = new Array(envelopes.length).fill(1);
-  let max = 1;
-  for (let i = 1; i < envelopes.length; i++) {
-    for (let j = 0; j < i; j++) {
-      if (envelopes[i][1] > envelopes[j][1]) {
-        dp[i] = Math.max(dp[i], dp[j] + 1);
-        max = Math.max(max, dp[i]);
-      }
+function removeKdigits(num, k) {
+  const stack = [];
+  for (const digit of num) {
+    while (k > 0 && stack.length && stack[stack.length - 1] > digit) {
+      stack.pop();
+      k--;
     }
+    stack.push(digit);
   }
-  return max;
+  while (k > 0) {
+    stack.pop();
+    k--;
+  }
+  let result = "";
+  let leadingZero = true;
+  for (const digit of stack) {
+    if (leadingZero && digit === "0") continue;
+    leadingZero = false;
+    result += digit;
+  }
+  return result || "0";
 }
